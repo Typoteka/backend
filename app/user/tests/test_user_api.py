@@ -30,7 +30,6 @@ class PublicUserApiTests(TestCase):
         payload = {
             'email': 'test@example.com',
             'password': 'testpass123',
-            'name': 'Test Name',
         }
         res = self.client.post(CREATE_USER_URL, payload)
 
@@ -44,7 +43,6 @@ class PublicUserApiTests(TestCase):
         payload = {
             'email': 'test@example.com',
             'password': 'testpass123',
-            'name': 'Test Name',
         }
         create_user(**payload)
         res = self.client.post(CREATE_USER_URL, payload)
@@ -56,7 +54,6 @@ class PublicUserApiTests(TestCase):
         payload = {
             'email': 'test@example.com',
             'password': 'pw',
-            'name': 'Test name',
         }
         res = self.client.post(CREATE_USER_URL, payload)
 
@@ -69,7 +66,6 @@ class PublicUserApiTests(TestCase):
     def test_create_token_for_user(self):
         """Test generates token for valid credentials."""
         user_details = {
-            'name': 'Test Name',
             'email': 'test@example.com',
             'password': 'test-user-password123',
         }
@@ -124,7 +120,6 @@ class PrivateUserApiTests(TestCase):
         self.user = create_user(
             email='test@example.com',
             password='testpass123',
-            name='Test Name',
         )
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
@@ -135,7 +130,6 @@ class PrivateUserApiTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, {
-            'name': self.user.name,
             'email': self.user.email,
         })
 
@@ -147,11 +141,10 @@ class PrivateUserApiTests(TestCase):
 
     def test_update_user_profile(self):
         """Test updating the user profile for the authenticated user."""
-        payload = {'name': 'Updated name', 'password': 'newpassword123'}
+        payload = {'password': 'newpassword123'}
 
         res = self.client.patch(ME_URL, payload)
 
         self.user.refresh_from_db()
-        self.assertEqual(self.user.name, payload['name'])
         self.assertTrue(self.user.check_password(payload['password']))
         self.assertEqual(res.status_code, status.HTTP_200_OK)
