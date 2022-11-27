@@ -12,7 +12,10 @@ from django.contrib.auth.password_validation import validate_password
 
 
 class RegisterUserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, validators=[validate_password])
+    password = serializers.CharField(
+        write_only=True,
+        validators=[validate_password]
+    )
     password2 = serializers.CharField(write_only=True)
 
     class Meta:
@@ -21,7 +24,9 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
+            raise serializers.ValidationError({
+                "password": "Password fields didn't match."
+            })
 
         return attrs
 
@@ -68,7 +73,10 @@ class AuthTokenSerializer(serializers.Serializer):
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, validators=[validate_password])
+    password = serializers.CharField(
+        write_only=True,
+        validators=[validate_password]
+    )
     password2 = serializers.CharField(write_only=True)
     old_password = serializers.CharField(write_only=True)
 
@@ -78,14 +86,18 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
+            raise serializers.ValidationError({
+                "password": "Password fields didn't match."
+            })
 
         return attrs
 
     def validate_old_password(self, value):
         user = self.context['request'].user
         if not user.check_password(value):
-            raise serializers.ValidationError({"message": "Old password is not correct."})
+            raise serializers.ValidationError({
+                "message": "Old password is not correct."
+            })
         return value
 
     def update(self, instance, validated_data):
