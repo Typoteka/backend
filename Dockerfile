@@ -23,11 +23,10 @@ RUN python -m venv /py && \
     fi && \
     rm -rf /tmp && \
     apk del .tmp-build-deps && \
-    # adduser \
-    #     --disabled-password \
-    #     # --no-create-home \
-    #     django-user
-    groupadd -g 1000 -o && useradd -u 1000 -d /home/django-user -m -k /etc/skel -g 1000 django-user
+     adduser \
+         --disabled-password \
+          --no-create-home \
+         django-user
 
 ENV PATH="/py/bin:$PATH"
 
