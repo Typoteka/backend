@@ -16,6 +16,10 @@ class UserManager(BaseUserManager):
         """Creates and saves a new user"""
         if not email:
             raise ValueError('Users must have an email address')
+
+        if not password:
+            raise ValueError('Users must have a password')
+
         user = self.model(email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -35,6 +39,8 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """Custom user model that supports using email instead of username."""
     email = models.EmailField(max_length=255, unique=True)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
@@ -44,4 +50,4 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         """Return string representation of our user."""
-        return self.email
+        return f"{self.first_name} {self.last_name}"
