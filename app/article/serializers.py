@@ -29,7 +29,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'date', 'preview', 'body', 'cover', 'categories'
         ]
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'cover']
 
 
 class ArticleDetailSerializer(ArticleSerializer):

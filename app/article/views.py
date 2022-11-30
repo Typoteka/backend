@@ -5,21 +5,50 @@ from core.models import (
     Comment,
 )
 from core.permissions import IsStaff, IsOwner
+from django.contrib.admin import filters
+from django.contrib.postgres.search import SearchVector
+from django.db.models import Count
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiParameter
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
+from rest_framework.filters import SearchFilter
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 
-# Create your views here.
+@extend_schema_view(
+    list=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                'best_first',
+                OpenApiTypes.INT, enum=[0, 1],
+                description='Articles with the biggest amount of comments go first',
+            ),
+        ]
+    )
+)
 class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ArticleSerializer
     queryset = Article.objects.all()
     authentication_classes = [TokenAuthentication]
+    filter_backends = (SearchFilter,)
+    search_fields = ['title', 'preview', 'body']
+
+    def get_queryset(self):
+        queryset = self.queryset
+        best_first = bool(int(self.request.query_params.get('best_first', 0)))
+
+        if best_first:
+            queryset = queryset.annotate(
+                num_comments=Count('comments')
+            ).order_by('-num_comments').distinct()
+
+        return queryset
 
     def get_permissions(self):
         permission_classes = []
@@ -99,4 +128,3 @@ class UpdateArticleCategoryView(ViewSet):
         article.categories.remove(category)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-
