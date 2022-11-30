@@ -27,7 +27,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = [
-            'id', 'title', 'date', 'preview', 'body', 'categories'
+            'id', 'title', 'date', 'preview', 'body', 'cover', 'categories'
         ]
         read_only_fields = ['id']
 
@@ -39,4 +39,10 @@ class ArticleDetailSerializer(ArticleSerializer):
         fields = ArticleSerializer.Meta.fields + ['comments']
 
 
+class ArticleImageSerializer(serializers.ModelSerializer):
+    cover = serializers.ImageField(max_length=None, allow_empty_file=True, allow_null=True, required=False)
 
+    class Meta:
+        model = Article
+        fields = ('id', 'cover')
+        read_only_fields = ('id',)
