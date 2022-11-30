@@ -7,8 +7,18 @@ router = DefaultRouter()
 router.register('articles', views.ArticleViewSet)
 
 articles_router = NestedSimpleRouter(router, r'articles', lookup='article')
-articles_router.register(r'comments', views.CommentViewSet, basename='article-comments')
-articles_router.register(r'categories', views.UpdateArticleCategoryView, basename='article-categories')
+
+articles_router.register(
+    r'comments',
+    views.CommentViewSet,
+    basename='article-comments'
+)
+
+articles_router.register(
+    r'categories',
+    views.UpdateArticleCategoryView,
+    basename='article-categories'
+)
 
 app_name = 'article'
 

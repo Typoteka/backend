@@ -5,17 +5,18 @@ from core.models import (
     Comment,
 )
 from core.permissions import IsStaff, IsOwner
-from django.contrib.admin import filters
-from django.contrib.postgres.search import SearchVector
 from django.db.models import Count
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiParameter
+from drf_spectacular.utils import (
+    extend_schema_view,
+    extend_schema,
+    OpenApiParameter,
+)
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.filters import SearchFilter
-from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
@@ -27,7 +28,7 @@ from rest_framework.viewsets import ViewSet
             OpenApiParameter(
                 'best_first',
                 OpenApiTypes.INT, enum=[0, 1],
-                description='Articles with the biggest amount of comments go first',
+                description='Articles with the most comments go first',
             ),
         ]
     )
@@ -97,7 +98,10 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Comment.objects.filter(article=self.kwargs['article_pk'])
 
     def perform_create(self, serializer):
-        serializer.save(article_id=self.kwargs['article_pk'], owner=self.request.user)
+        serializer.save(
+            article_id=self.kwargs['article_pk'],
+            owner=self.request.user
+        )
 
 
 class UpdateArticleCategoryView(ViewSet):
@@ -109,7 +113,10 @@ class UpdateArticleCategoryView(ViewSet):
         try:
             obj = class_.objects.get(pk=pk)
         except class_.DoesNotExist:
-            raise NotFound(detail=f'{class_.__name__} with id {pk} does not exist', code=404)
+            raise NotFound(
+                detail=f'{class_.__name__} with id {pk} does not exist',
+                code=404
+            )
 
         return obj
 

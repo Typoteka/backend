@@ -1,11 +1,9 @@
-from rest_framework import viewsets, serializers
-
+from category.serializers import CategorySerializer
 from core.models import (
     Article,
-    Category,
     Comment,
 )
-from category.serializers import CategorySerializer
+from rest_framework import serializers
 from user.serializers import UserSerializer
 
 
@@ -40,7 +38,12 @@ class ArticleDetailSerializer(ArticleSerializer):
 
 
 class ArticleImageSerializer(serializers.ModelSerializer):
-    cover = serializers.ImageField(max_length=None, allow_empty_file=True, allow_null=True, required=False)
+    cover = serializers.ImageField(
+        max_length=None,
+        allow_empty_file=True,
+        allow_null=True,
+        required=False
+    )
 
     class Meta:
         model = Article
