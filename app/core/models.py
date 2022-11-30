@@ -1,12 +1,24 @@
 """
 Database models.
 """
+import os
+import uuid
+
+from django.core.validators import MaxLengthValidator
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
 )
+
+
+def image_file_path(instance, filename):
+    """Generate file path for new recipe image"""
+    ext = filename.split('.')[-1]
+    filename = f'{uuid.uuid4()}.{ext}'
+
+    return os.path.join('uploads', 'recipe', filename)
 
 
 class UserManager(BaseUserManager):
@@ -51,3 +63,33 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """Return string representation of our user."""
         return f"{self.first_name} {self.last_name}"
+
+
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    date = models.DateField(auto_now_add=True)
+    preview = models.CharField(max_length=255)
+    body = models.TextField()
+    cover = models.ImageField(null=True, upload_to=image_file_path)
+    categories = models.ManyToManyField('Category')
+
+    def __str__(self):
+        return self.title
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Comment(models.Model):
+    time = models.DateTimeField(auto_now_add=True)
+    content = models.TextField(validators=[MaxLengthValidator(1500)])
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.content
+
