@@ -5,3 +5,4 @@ drf-spectacular>=0.24.2,<0.25
 drf-nested-routers>=0.93.4,<0.94
 Pillow>=9.3.0,<9.4
 uwsgi>=2.0.21,<2.1
+django-cors-headers>=3.13.0,<3.14
