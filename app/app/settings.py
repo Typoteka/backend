@@ -151,5 +151,5 @@ SPECTACULAR_SETTINGS = {
 
 CORS_ALLOWED_ORIGINS = [
     "https://pps-ukma.web.app",
-    "http://localhost"
+    "http://localhost:3000"
 ]
