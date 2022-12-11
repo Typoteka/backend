@@ -157,6 +157,7 @@ SPECTACULAR_SETTINGS = {
 #     "http://localhost",
 # ]
 
+CORS_ALLOW_HEADERS = ['*']
 ALLOWED_HOSTS = ["*"]
 CORS_ALLOW_ALL_ORIGINS = True
 
