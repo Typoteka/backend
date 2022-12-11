@@ -149,10 +149,14 @@ SPECTACULAR_SETTINGS = {
     'COMPONENT_SPLIT_REQUEST': True,
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "https://pps-ukma.web.app",
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1",
-    "http://localhost:3000",
-    "http://localhost",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "https://pps-ukma.web.app",
+#     "http://127.0.0.1:3000",
+#     "http://127.0.0.1",
+#     "http://localhost:3000",
+#     "http://localhost",
+# ]
+
+ALLOWED_HOSTS = ["*"]
+CORS_ALLOW_ALL_ORIGINS = True
+
