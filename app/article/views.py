@@ -47,7 +47,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         if best_first:
             queryset = queryset.annotate(
                 num_comments=Count('comments')
-            ).order_by('-num_comments').distinct()
+            ).order_by('-num_comments')
 
         return queryset
 

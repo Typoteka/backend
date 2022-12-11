@@ -31,7 +31,7 @@ class CategoryViewSet(ModelViewSet):
         with_assigned_articles = bool(int(self.request.query_params.get('with_assigned_articles', 0)))
 
         if with_assigned_articles:
-            queryset = queryset.filter(article__isnull=False).distinct()
+            queryset = queryset.filter(article__isnull=False)
 
         return queryset
 
