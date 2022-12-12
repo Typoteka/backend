@@ -28,7 +28,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         if self.kwargs.get('article_pk') is not None:
             queryset = queryset.filter(article_id=self.kwargs['article_pk'])
 
-        return queryset
+        return queryset.order_by('-time')
 
     def perform_create(self, serializer):
         serializer.save(
