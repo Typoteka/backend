@@ -6,8 +6,22 @@ from core.models import (
 from rest_framework import serializers
 
 from comment.serializers import CommentSerializer
+from rest_framework.relations import PrimaryKeyRelatedField
+
+from core.models import Category
+
+from core.helpers import get_or_404
 
 
+class CreateArticleSerializer(serializers.ModelSerializer):
+    categories = PrimaryKeyRelatedField(many=True, queryset=Category.objects.all())
+
+    class Meta:
+        model = Article
+        fields = [
+            'id', 'title', 'date', 'preview', 'body', 'cover', 'categories'
+        ]
+        read_only_fields = ['id', 'cover']
 
 
 class ArticleSerializer(serializers.ModelSerializer):
