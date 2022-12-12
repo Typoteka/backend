@@ -41,7 +41,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
     search_fields = ['title', 'preview', 'body']
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = super(ArticleViewSet, self).get_queryset()
         best_first = bool(int(self.request.query_params.get('best_first', 0)))
 
         if best_first:

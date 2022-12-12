@@ -1,8 +1,11 @@
+from django.http import Http404
 from django.shortcuts import render
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiParameter
+from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from category.serializers import CategorySerializer
 from core.models import Category
@@ -27,7 +30,8 @@ class CategoryViewSet(ModelViewSet):
     authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = super(CategoryViewSet, self).get_queryset()
+
         with_assigned_articles = bool(int(self.request.query_params.get('with_assigned_articles', 0)))
 
         if with_assigned_articles:
@@ -42,4 +46,3 @@ class CategoryViewSet(ModelViewSet):
             permission_classes = [IsAuthenticated, IsStaff]
 
         return [permission() for permission in permission_classes]
-
