@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from article.views import ArticleViewSet, UpdateArticleCategoryView
-from comment.views import CommentViewSet
+from comment.views import CommentViewSetWithCreate
 from rest_framework_nested.routers import NestedSimpleRouter
 
 router = DefaultRouter()
@@ -11,7 +11,7 @@ articles_router = NestedSimpleRouter(router, r'articles', lookup='article')
 
 articles_router.register(
     r'comments',
-    CommentViewSet,
+    CommentViewSetWithCreate,
     basename='article-comments'
 )
 

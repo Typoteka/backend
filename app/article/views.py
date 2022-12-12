@@ -21,7 +21,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-
+from core.helpers import get_or_404
 
 
 @extend_schema_view(
@@ -72,7 +72,6 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
         return self.serializer_class
 
-
     @action(methods=['POST'], detail=True, url_path='upload-image')
     def upload_image(self, request, pk=None):
         """Upload an image to article."""
@@ -91,16 +90,16 @@ class UpdateArticleCategoryView(ViewSet):
     permission_classes = [IsAuthenticated, IsStaff]
 
     def update(self, _request, pk=None, article_pk=None):
-        article = _get_or_404(Article, article_pk)
-        category = _get_or_404(Category, pk)
+        article = get_or_404(Article, article_pk)
+        category = get_or_404(Category, pk)
 
         article.categories.add(category)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, _request, pk=None, article_pk=None):
-        article = _get_or_404(Article, article_pk)
-        category = _get_or_404(Category, pk)
+        article = get_or_404(Article, article_pk)
+        category = get_or_404(Category, pk)
 
         article.categories.remove(category)
 
