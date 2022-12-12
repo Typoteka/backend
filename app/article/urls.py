@@ -1,22 +1,23 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from article import views
+from article.views import ArticleViewSet, UpdateArticleCategoryView
+from comment.views import CommentViewSet
 from rest_framework_nested.routers import NestedSimpleRouter
 
 router = DefaultRouter()
-router.register('articles', views.ArticleViewSet)
+router.register('articles', ArticleViewSet)
 
 articles_router = NestedSimpleRouter(router, r'articles', lookup='article')
 
 articles_router.register(
     r'comments',
-    views.CommentViewSet,
+    CommentViewSet,
     basename='article-comments'
 )
 
 articles_router.register(
     r'categories',
-    views.UpdateArticleCategoryView,
+    UpdateArticleCategoryView,
     basename='article-categories'
 )
 

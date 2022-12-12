@@ -81,29 +81,6 @@ class ArticleViewSet(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CommentViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.CommentSerializer
-    queryset = Comment.objects.all()
-    authentication_classes = [TokenAuthentication]
-
-    def get_permissions(self):
-        permission_classes = []
-
-        if self.action not in ['list', 'retrieve']:
-            permission_classes = [IsAuthenticated, IsOwner]
-
-        return [permission() for permission in permission_classes]
-
-    def get_queryset(self):
-        return Comment.objects.filter(article=self.kwargs['article_pk'])
-
-    def perform_create(self, serializer):
-        serializer.save(
-            article_id=self.kwargs['article_pk'],
-            owner=self.request.user
-        )
-
-
 class UpdateArticleCategoryView(ViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated, IsStaff]

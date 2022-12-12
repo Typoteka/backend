@@ -33,6 +33,7 @@ urlpatterns = [
     path(r'api/user/', include('user.urls')),
     path('api/', include('article.urls')),
     path('api/', include('category.urls')),
+    path('api/', include('comment.urls')),
 ]
 
 if settings.DEBUG:

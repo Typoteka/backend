@@ -4,18 +4,10 @@ from core.models import (
     Comment,
 )
 from rest_framework import serializers
-from user.serializers import UserSerializer
+
+from comment.serializers import CommentSerializer
 
 
-class CommentSerializer(serializers.ModelSerializer):
-    """Serializer for tags."""
-
-    owner = UserSerializer(read_only=True)
-
-    class Meta:
-        model = Comment
-        fields = ['id', 'article_id', 'time', 'content', 'owner']
-        read_only_fields = ['id', 'article_id']
 
 
 class ArticleSerializer(serializers.ModelSerializer):
